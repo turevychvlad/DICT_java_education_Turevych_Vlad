@@ -4,6 +4,8 @@ import java.util.Scanner;
 
 import java.util.Scanner;
 
+import java.util.Scanner;
+
 public class ChatBot {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -24,5 +26,12 @@ public class ChatBot {
 
         int age = (rem3 * 70 + rem5 * 21 + rem7 * 15) % 105;
         System.out.println("Your age is " + age + "; that's a good time to start programming!");
+
+        System.out.println("Now I will prove to you that I can count to any number you want!");
+        int number = scanner.nextInt();
+
+        for (int i = 0; i <= number; i++) {
+            System.out.println(i + "!");
+        }
     }
 }
