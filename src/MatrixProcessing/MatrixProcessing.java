@@ -10,6 +10,7 @@ public class MatrixProcessing {
             // Меню
             System.out.println("1. Add matrices");
             System.out.println("2. Multiply matrix by a constant");
+            System.out.println("3. Multiply matrices");
             System.out.println("0. Exit");
             System.out.print("Your choice: ");
             int choice = scanner.nextInt();
@@ -25,6 +26,9 @@ public class MatrixProcessing {
                 case 2: // Множення матриці на константу
                     multiplyMatrixByConstant(scanner);
                     break;
+                case 3: // Множення матриць
+                    multiplyMatrices(scanner);
+                    break;
                 default:
                     System.out.println("Invalid choice. Try again.");
             }
@@ -37,11 +41,11 @@ public class MatrixProcessing {
         int n1 = scanner.nextInt();
         int m1 = scanner.nextInt();
 
-        int[][] matrixA = new int[n1][m1];
+        double[][] matrixA = new double[n1][m1];
         System.out.println("Enter first matrix:");
         for (int i = 0; i < n1; i++) {
             for (int j = 0; j < m1; j++) {
-                matrixA[i][j] = scanner.nextInt();
+                matrixA[i][j] = scanner.nextDouble();
             }
         }
 
@@ -51,20 +55,20 @@ public class MatrixProcessing {
         int m2 = scanner.nextInt();
 
         if (n1 != n2 || m1 != m2) {
-            System.out.println("ERROR");
+            System.out.println("The operation cannot be performed.");
             return;
         }
 
-        int[][] matrixB = new int[n2][m2];
+        double[][] matrixB = new double[n2][m2];
         System.out.println("Enter second matrix:");
         for (int i = 0; i < n2; i++) {
             for (int j = 0; j < m2; j++) {
-                matrixB[i][j] = scanner.nextInt();
+                matrixB[i][j] = scanner.nextDouble();
             }
         }
 
         // Обчислення суми матриць
-        int[][] result = new int[n1][m1];
+        double[][] result = new double[n1][m1];
         for (int i = 0; i < n1; i++) {
             for (int j = 0; j < m1; j++) {
                 result[i][j] = matrixA[i][j] + matrixB[i][j];
@@ -82,20 +86,20 @@ public class MatrixProcessing {
         int n = scanner.nextInt();
         int m = scanner.nextInt();
 
-        int[][] matrix = new int[n][m];
+        double[][] matrix = new double[n][m];
         System.out.println("Enter matrix:");
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
-                matrix[i][j] = scanner.nextInt();
+                matrix[i][j] = scanner.nextDouble();
             }
         }
 
         // Зчитування константи
         System.out.println("Enter constant:");
-        int constant = scanner.nextInt();
+        double constant = scanner.nextDouble();
 
         // Множення матриці на константу
-        int[][] result = new int[n][m];
+        double[][] result = new double[n][m];
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
                 result[i][j] = matrix[i][j] * constant;
@@ -107,9 +111,56 @@ public class MatrixProcessing {
         printMatrix(result);
     }
 
-    private static void printMatrix(int[][] matrix) {
-        for (int[] row : matrix) {
-            for (int value : row) {
+    private static void multiplyMatrices(Scanner scanner) {
+        // Зчитування першої матриці
+        System.out.println("Enter size of first matrix:");
+        int n1 = scanner.nextInt();
+        int m1 = scanner.nextInt();
+
+        double[][] matrixA = new double[n1][m1];
+        System.out.println("Enter first matrix:");
+        for (int i = 0; i < n1; i++) {
+            for (int j = 0; j < m1; j++) {
+                matrixA[i][j] = scanner.nextDouble();
+            }
+        }
+
+        // Зчитування другої матриці
+        System.out.println("Enter size of second matrix:");
+        int n2 = scanner.nextInt();
+        int m2 = scanner.nextInt();
+
+        if (m1 != n2) {
+            System.out.println("The operation cannot be performed.");
+            return;
+        }
+
+        double[][] matrixB = new double[n2][m2];
+        System.out.println("Enter second matrix:");
+        for (int i = 0; i < n2; i++) {
+            for (int j = 0; j < m2; j++) {
+                matrixB[i][j] = scanner.nextDouble();
+            }
+        }
+
+        // Множення матриць
+        double[][] result = new double[n1][m2];
+        for (int i = 0; i < n1; i++) {
+            for (int j = 0; j < m2; j++) {
+                for (int k = 0; k < m1; k++) {
+                    result[i][j] += matrixA[i][k] * matrixB[k][j];
+                }
+            }
+        }
+
+        // Виведення результату
+        System.out.println("The result is:");
+        printMatrix(result);
+    }
+
+    private static void printMatrix(double[][] matrix) {
+        for (double[] row : matrix) {
+            for (double value : row) {
                 System.out.print(value + " ");
             }
             System.out.println();
