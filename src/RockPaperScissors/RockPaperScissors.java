@@ -9,11 +9,17 @@ public class RockPaperScissors {
         Random random = new Random();
         String[] options = {"rock", "paper", "scissors"};
 
-        System.out.println("Enter your move (rock, paper, scissors):");
+        System.out.println("Enter your move (rock, paper, scissors) or !exit to quit:");
         while (true) {
             String userMove = scanner.nextLine();
+
+            if (userMove.equals("!exit")) {
+                System.out.println("Bye!");
+                break;
+            }
+
             if (!userMove.equals("rock") && !userMove.equals("paper") && !userMove.equals("scissors")) {
-                System.out.println("Invalid input. Please enter rock, paper, or scissors.");
+                System.out.println("Invalid input. Please enter rock, paper, scissors, or !exit.");
                 continue;
             }
 
