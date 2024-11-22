@@ -8,15 +8,31 @@ public class Hangman {
         Scanner scanner = new Scanner(System.in);
         Random random = new Random();
         String[] words = {"python", "java", "javascript", "kotlin"};
-        String word = words[random.nextInt(words.length)];
-        char[] progress = "-".repeat(word.length()).toCharArray();
-        int attempts = 8;
 
         System.out.println("HANGMAN");
-        while (attempts > 0) {
+        System.out.println("Type \"play\" to play the game, \"exit\" to quit: >");
+
+        while (true) {
+            String command = scanner.nextLine();
+            if (command.equals("play")) {
+                playGame(scanner, random, words);
+            } else if (command.equals("exit")) {
+                break;
+            }
+        }
+    }
+
+    public static void playGame(Scanner scanner, Random random, String[] words) {
+        String word = words[random.nextInt(words.length)];
+        char[] progress = "-".repeat(word.length()).toCharArray();
+        int mistakes = 0;
+        int maxMistakes = 8;
+
+        while (mistakes < maxMistakes) {
             System.out.println(progress);
             System.out.println("Input a letter: >");
             char guess = scanner.next().charAt(0);
+
             if (word.indexOf(guess) != -1) {
                 for (int i = 0; i < word.length(); i++) {
                     if (word.charAt(i) == guess) {
@@ -25,7 +41,7 @@ public class Hangman {
                 }
             } else {
                 System.out.println("That letter doesn't appear in the word");
-                attempts--;
+                mistakes++;
             }
 
             if (String.valueOf(progress).equals(word)) {
