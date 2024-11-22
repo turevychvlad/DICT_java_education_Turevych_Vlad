@@ -26,48 +26,61 @@ public class RockPaperScissors {
         System.out.println("Enter your name:");
         String userName = scanner.nextLine();
         System.out.println("Hello, " + userName);
-        int userScore = ratings.getOrDefault(userName, 0);
+        var ref = new Object() {
+            int userScore = ratings.getOrDefault(userName, 0);
+        };
 
-        // Вибір режиму гри
-        System.out.println("Choose game mode: ");
-        System.out.println("1. Classic (rock, paper, scissors)");
-        System.out.println("2. Extended (rock, fire, scissors, snake, human, tree, wolf, sponge, paper, air, water, dragon, devil, lightning, gun)");
-        int choice;
+        // Головний цикл
+        label:
         while (true) {
-            try {
-                choice = Integer.parseInt(scanner.nextLine());
-                if (choice == 1 || choice == 2) break;
-                System.out.println("Invalid choice. Please enter 1 or 2.");
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Please enter a number.");
+            System.out.println("Main menu:");
+            System.out.println("1. Play Classic (rock, paper, scissors)");
+            System.out.println("2. Play Extended (rock, fire, scissors, snake, human, tree, wolf, sponge, paper, air, water, dragon, devil, lightning, gun)");
+            System.out.println("!rating - View your rating");
+            System.out.println("!exit - Exit the game");
+            System.out.println("Enter your choice:");
+
+            String choice = scanner.nextLine();
+
+            switch (choice) {
+                case "!rating":
+                    System.out.println("Your rating: " + ref.userScore);
+                    break;
+                case "!exit":
+                    System.out.println("Bye!");
+                    ratings.put(userName, ref.userScore);
+                    saveRatings(ratings);
+                    break label;
+                case "1":
+                case "2":
+                    String[] options = choice.equals("1")
+                            ? new String[]{"rock", "paper", "scissors"}
+                            : new String[]{"rock", "fire", "scissors", "snake", "human", "tree", "wolf", "sponge",
+                            "paper", "air", "water", "dragon", "devil", "lightning", "gun"};
+
+                    System.out.println("Starting game...");
+                    playGame(scanner, random, options, ref.userScore, (score) -> ref.userScore = score);
+                    break;
+                default:
+                    System.out.println("Invalid input. Please select a valid option.");
+                    break;
             }
         }
+    }
 
-        String[] options = choice == 1
-                ? new String[]{"rock", "paper", "scissors"}
-                : new String[]{"rock", "fire", "scissors", "snake", "human", "tree", "wolf", "sponge",
-                "paper", "air", "water", "dragon", "devil", "lightning", "gun"};
-
-        System.out.println("Okay, let's start!");
-
-        // Ігровий цикл
+    // Метод гри
+    private static void playGame(Scanner scanner, Random random, String[] options, int userScore, ScoreUpdater updater) {
+        System.out.println("Enter your move (" + String.join(", ", options) + "), or !exit to return to main menu:");
         while (true) {
             String userMove = scanner.nextLine();
 
             if (userMove.equals("!exit")) {
-                System.out.println("Bye!");
-                ratings.put(userName, userScore);
-                saveRatings(ratings);
+                System.out.println("Returning to main menu...");
                 break;
             }
 
-            if (userMove.equals("!rating")) {
-                System.out.println("Your rating: " + userScore);
-                continue;
-            }
-
             if (!Arrays.asList(options).contains(userMove)) {
-                System.out.println("Invalid input");
+                System.out.println("Invalid input. Please try again.");
                 continue;
             }
 
@@ -84,6 +97,7 @@ public class RockPaperScissors {
                 userScore += 100;
             }
         }
+        updater.updateScore(userScore);
     }
 
     // Метод для отримання виграшних опцій
@@ -105,5 +119,10 @@ public class RockPaperScissors {
         } catch (IOException e) {
             System.out.println("An error occurred while saving ratings.");
         }
+    }
+
+    // Інтерфейс для оновлення рахунку
+    interface ScoreUpdater {
+        void updateScore(int score);
     }
 }
