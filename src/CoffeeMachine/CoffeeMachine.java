@@ -1,5 +1,6 @@
 package CoffeeMachine;
 
+
 import java.util.Scanner;
 
 
