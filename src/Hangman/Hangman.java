@@ -27,11 +27,32 @@ public class Hangman {
         char[] progress = "-".repeat(word.length()).toCharArray();
         int mistakes = 0;
         int maxMistakes = 8;
+        boolean[] guessedLetters = new boolean[26];
 
         while (mistakes < maxMistakes) {
             System.out.println(progress);
             System.out.println("Input a letter: >");
-            char guess = scanner.next().charAt(0);
+            String input = scanner.next();
+
+            // Перевірка на однобуквений ввід
+            if (input.length() != 1) {
+                System.out.println("You should input a single letter.");
+                continue;
+            }
+
+            // Перевірка на малі літери
+            char guess = input.charAt(0);
+            if (!Character.isLowerCase(guess)) {
+                System.out.println("Please enter a lowercase English letter.");
+                continue;
+            }
+
+            // Перевірка на повторний ввід
+            if (guessedLetters[guess - 'a']) {
+                System.out.println("You've already guessed this letter.");
+                continue;
+            }
+            guessedLetters[guess - 'a'] = true;
 
             if (word.indexOf(guess) != -1) {
                 for (int i = 0; i < word.length(); i++) {
@@ -40,7 +61,7 @@ public class Hangman {
                     }
                 }
             } else {
-                System.out.println("That letter doesn't appear in the word");
+                System.out.println("That letter doesn't appear in the word.");
                 mistakes++;
             }
 
