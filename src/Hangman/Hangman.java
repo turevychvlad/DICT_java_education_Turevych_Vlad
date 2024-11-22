@@ -9,8 +9,9 @@ public class Hangman {
         Random random = new Random();
         String[] words = {"python", "java", "javascript", "kotlin"};
         String word = words[random.nextInt(words.length)];
+        String hint = word.substring(0, 2) + "-".repeat(word.length() - 2);
         System.out.println("HANGMAN");
-        System.out.println("Guess the word: >");
+        System.out.println("Guess the word " + hint + ": >");
         String guess = scanner.nextLine();
         if (guess.equals(word)) {
             System.out.println("You survived!");
