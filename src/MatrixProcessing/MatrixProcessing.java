@@ -12,6 +12,7 @@ public class MatrixProcessing {
             System.out.println("2. Multiply matrix by a constant");
             System.out.println("3. Multiply matrices");
             System.out.println("4. Transpose matrix");
+            System.out.println("5. Calculate a determinant");
             System.out.println("0. Exit");
             System.out.print("Your choice: ");
             int choice = scanner.nextInt();
@@ -32,6 +33,9 @@ public class MatrixProcessing {
                     break;
                 case 4: // Транспонування матриці
                     transposeMatrix(scanner);
+                    break;
+                case 5: // Обчислення визначника
+                    calculateDeterminant(scanner);
                     break;
                 default:
                     System.out.println("Invalid choice. Try again.");
@@ -213,7 +217,9 @@ public class MatrixProcessing {
             case 4: // Горизонтальна лінія
                 result = new double[n][m];
                 for (int i = 0; i < n; i++) {
-                    System.arraycopy(matrix[i], 0, result[n - i - 1], 0, m);
+                    for (int j = 0; j < m; j++) {
+                        result[n - i - 1][j] = matrix[i][j];
+                    }
                 }
                 break;
             default:
@@ -224,6 +230,54 @@ public class MatrixProcessing {
         // Виведення результату
         System.out.println("The result is:");
         printMatrix(result);
+    }
+
+    private static void calculateDeterminant(Scanner scanner) {
+        // Зчитування розміру матриці
+        System.out.println("Enter matrix size:");
+        int n = scanner.nextInt();
+        int m = scanner.nextInt();
+
+        if (n != m) {
+            System.out.println("The operation cannot be performed.");
+            return;
+        }
+
+        // Зчитування матриці
+        double[][] matrix = new double[n][n];
+        System.out.println("Enter matrix:");
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                matrix[i][j] = scanner.nextDouble();
+            }
+        }
+
+        // Обчислення визначника
+        double determinant = calculateDeterminantRecursive(matrix);
+        System.out.println("The result is:");
+        System.out.println(determinant);
+    }
+
+    private static double calculateDeterminantRecursive(double[][] matrix) {
+        int n = matrix.length;
+
+        if (n == 1) return matrix[0][0];
+        if (n == 2) return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0];
+
+        double determinant = 0;
+        for (int col = 0; col < n; col++) {
+            double[][] minor = new double[n - 1][n - 1];
+            for (int i = 1; i < n; i++) {
+                int minorCol = 0;
+                for (int j = 0; j < n; j++) {
+                    if (j == col) continue;
+                    minor[i - 1][minorCol++] = matrix[i][j];
+                }
+            }
+            determinant += Math.pow(-1, col) * matrix[0][col] * calculateDeterminantRecursive(minor);
+        }
+
+        return determinant;
     }
 
     private static void printMatrix(double[][] matrix) {
