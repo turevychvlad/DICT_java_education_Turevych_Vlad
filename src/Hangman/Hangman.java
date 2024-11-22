@@ -9,14 +9,31 @@ public class Hangman {
         Random random = new Random();
         String[] words = {"python", "java", "javascript", "kotlin"};
         String word = words[random.nextInt(words.length)];
-        String hint = word.substring(0, 2) + "-".repeat(word.length() - 2);
+        char[] progress = "-".repeat(word.length()).toCharArray();
+        int attempts = 8;
+
         System.out.println("HANGMAN");
-        System.out.println("Guess the word " + hint + ": >");
-        String guess = scanner.nextLine();
-        if (guess.equals(word)) {
-            System.out.println("You survived!");
-        } else {
-            System.out.println("You lost!");
+        while (attempts > 0) {
+            System.out.println(progress);
+            System.out.println("Input a letter: >");
+            char guess = scanner.next().charAt(0);
+            if (word.indexOf(guess) != -1) {
+                for (int i = 0; i < word.length(); i++) {
+                    if (word.charAt(i) == guess) {
+                        progress[i] = guess;
+                    }
+                }
+            } else {
+                System.out.println("That letter doesn't appear in the word");
+                attempts--;
+            }
+
+            if (String.valueOf(progress).equals(word)) {
+                System.out.println("You guessed the word!");
+                System.out.println("You survived!");
+                return;
+            }
         }
+        System.out.println("You lost!");
     }
 }
