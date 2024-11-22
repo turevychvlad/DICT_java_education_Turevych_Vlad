@@ -11,6 +11,7 @@ public class MatrixProcessing {
             System.out.println("1. Add matrices");
             System.out.println("2. Multiply matrix by a constant");
             System.out.println("3. Multiply matrices");
+            System.out.println("4. Transpose matrix");
             System.out.println("0. Exit");
             System.out.print("Your choice: ");
             int choice = scanner.nextInt();
@@ -28,6 +29,9 @@ public class MatrixProcessing {
                     break;
                 case 3: // Множення матриць
                     multiplyMatrices(scanner);
+                    break;
+                case 4: // Транспонування матриці
+                    transposeMatrix(scanner);
                     break;
                 default:
                     System.out.println("Invalid choice. Try again.");
@@ -151,6 +155,70 @@ public class MatrixProcessing {
                     result[i][j] += matrixA[i][k] * matrixB[k][j];
                 }
             }
+        }
+
+        // Виведення результату
+        System.out.println("The result is:");
+        printMatrix(result);
+    }
+
+    private static void transposeMatrix(Scanner scanner) {
+        // Меню для вибору способу транспонування
+        System.out.println("1. Main diagonal");
+        System.out.println("2. Side diagonal");
+        System.out.println("3. Vertical line");
+        System.out.println("4. Horizontal line");
+        System.out.print("Your choice: ");
+        int choice = scanner.nextInt();
+
+        // Зчитування матриці
+        System.out.println("Enter matrix size:");
+        int n = scanner.nextInt();
+        int m = scanner.nextInt();
+
+        double[][] matrix = new double[n][m];
+        System.out.println("Enter matrix:");
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                matrix[i][j] = scanner.nextDouble();
+            }
+        }
+
+        double[][] result;
+        switch (choice) {
+            case 1: // Головна діагональ
+                result = new double[m][n];
+                for (int i = 0; i < n; i++) {
+                    for (int j = 0; j < m; j++) {
+                        result[j][i] = matrix[i][j];
+                    }
+                }
+                break;
+            case 2: // Побічна діагональ
+                result = new double[m][n];
+                for (int i = 0; i < n; i++) {
+                    for (int j = 0; j < m; j++) {
+                        result[m - j - 1][n - i - 1] = matrix[i][j];
+                    }
+                }
+                break;
+            case 3: // Вертикальна лінія
+                result = new double[n][m];
+                for (int i = 0; i < n; i++) {
+                    for (int j = 0; j < m; j++) {
+                        result[i][m - j - 1] = matrix[i][j];
+                    }
+                }
+                break;
+            case 4: // Горизонтальна лінія
+                result = new double[n][m];
+                for (int i = 0; i < n; i++) {
+                    System.arraycopy(matrix[i], 0, result[n - i - 1], 0, m);
+                }
+                break;
+            default:
+                System.out.println("Invalid choice.");
+                return;
         }
 
         // Виведення результату
